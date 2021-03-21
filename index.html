@@ -13,6 +13,7 @@
     <svg class="viz"></svg>
 
     <script>
+
     data = d3.csv("data/pokedex.csv")
     .then(data => {
         console.log("data", data);
@@ -70,6 +71,18 @@
         });
 
         console.log(data);
+
+
+        function Total(generation){
+            count = 0
+            if (generation == 0) {
+                data.forEach(d => {
+                    if (d['name'].includes("Castform")) {
+                        count += 1/4
+                    }
+                })
+            }
+        }
     });
 
     </script>
