@@ -20,7 +20,7 @@
         if d['name'].includes("Mega"){
           return false;
         }
-        if d['name'].includes("Alolan"){
+        if d['name'].includes("Alolan") {
           return false;
         }
         if d['name'].includes("Galarian"){
@@ -126,6 +126,11 @@
         }
       }
     }
+
+    const types = d3.map(data, d => d['type']);
+    const typeScale = d3.scaleBand().domain(types).range([0, chartWidth]).padding(.1);
+    // insert total for highest total below
+    const totalScale = d3.scaleLinear().domain([0, 1000]).range([chartHeight, 0]);
 
     </script>
 
