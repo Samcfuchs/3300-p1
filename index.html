@@ -13,7 +13,7 @@
     <svg class="viz"></svg>
 
     <script>
-    data = d3.csv("data/pokedex_(Update_05.20).csv")
+    data = d3.csv("data/pokedex.csv")
     .then((data)) => {
       console.log("data", data);
       data = data.filter( (d) => {
