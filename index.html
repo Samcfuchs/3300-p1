@@ -16,6 +16,104 @@
     data = d3.csv("data/pokedex_(Update_05.20).csv")
     .then((data)) => {
       console.log("data", data);
+      data = data.filter( (d) => {
+        if d['name'].includes("Mega"){
+          return false;
+        }
+        if d['name'].includes("Alolan"){
+          return false;
+        }
+        if d['name'].includes("Galarian"){
+          return false;
+        }
+        if d['name'] === "Deoxys Attack Forme"{
+          return false;
+        }
+        if d['name'] === "Deoxys Defense Forme"{
+          return false;
+        }
+        if d['name'] === 'Deoxys Speed Forme'{
+          return false;
+        }
+        if d['name'] === "Giratina Origin Forme"{
+          return false;
+        }
+        if d['name'] === "Basculin Blue-Striped Form"{
+          return false;
+        }
+        if d['name'].includes("Therian Forme"){
+          return false;
+        }
+        if d['name'] === "Black Kyurem" {
+          return false;
+        }
+        if d['name'] === "White Kyurem" {
+          return false;
+        }
+        if d['name'].includes("Resolute Forme"){
+          return false;
+        }
+        if d['name'] === "Meowstic Female"{
+          return false;
+        }
+        if d['name'] === "Aegislash Shield Forme"{
+          return false;
+        }
+        if d['name'] === "Pumpkaboo Small Size"{
+          return false;
+        }
+        if d['name'] === "Pumpkaboo Large Size"{
+          return false;
+        }
+        if d['name'] === "Pumpkaboo Super Size"{
+          return false;
+        }
+        if d['name'] === "Gourgeist Small Size"{
+          return false;
+        }
+        if d['name'] === "Gourgeist Large Size"{
+          return false;
+        }
+        if d['name'] === "Gourgeist Super Size"{
+          return false;
+        }
+        if d['name'] === "Zygarde 50% Forme"{
+          return false;
+        }
+        if d['name'] === "Zygarde 10% Forme"{
+          return false;
+        }
+        if d['name'] === "Own Tempo Rockruff"{
+          return false;
+        }
+        if d['name'] === "Lycanroc Midday Form"{
+          return false;
+        }
+        if d['name'] === "Lycanroc Midnight Form"{
+          return false;
+        }
+        if d['name'] === "Wishiwashi Solo Form"{
+          return false;
+        }
+        if d['name'] === "Minior Meteor Form"{
+          return false;
+        }
+        if d['name'] === "Toxtricity Low Key Form"{
+          return false;
+        }
+        if d['name'] === "Eiscue Noice Face"{
+          return false;
+        }
+        if d['name'] === "Indeedee Male"{
+          return false;
+        }
+        if d['name'] === "Morpeko Hangry Mode"{
+          return false;
+        }
+        if d['name'] === "Eternatus Eternamax"{
+          return false;
+        }
+      })
     }
 
     </script>
