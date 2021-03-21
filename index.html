@@ -14,7 +14,7 @@
 
     <script>
     data = d3.csv("data/pokedex.csv")
-    .then((data)) => {
+    .then((data) => {
       console.log("data", data);
       data = data.filter( (d) => {
         if d['name'].includes("Mega"){
@@ -200,7 +200,7 @@
           }
         }
       }
-    }
+    })
 
     console.log("Total", Total(0));
 
