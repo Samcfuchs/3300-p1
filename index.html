@@ -115,6 +115,8 @@
         }
       })
 
+      console.log("data", data);
+
       function total(generation){
         count = 0
         if (generation === 0){
@@ -156,9 +158,9 @@
               count += 1
             }
           })
-          else{
+        }else {
             data.forEach( d => {
-              if d['generation'] == generation {
+              if (d['generation'] === generation) {
                 if (d['name'].includes("Castform")){
                   count += 1/4;
                 }
@@ -198,9 +200,13 @@
               }
             })
           }
+          return count;
         }
-      }
-    }
+        console.log("Total", total(0));
+      })
+
+
+
 
     </script>
 
