@@ -18,25 +18,24 @@
     .then(data => {
         console.log("data", data);
         const badSubNames = [
-            "Mega",
+            "Mega ",
             "Alolan",
             "Galarian",
             "Therian Forme",
             "Resolute Forme",
         ];
         const badNames = [
-            "Mega",
-            "Alolan",
-            "Galarian",
+            //"Alolan",
+            //"Galarian",
             "Deoxys Attack Forme",
             "Deoxys Defense Forme",
             "Deoxys Speed Forme",
             "Giratina Origin Forme",
             "Basculin Blue-Striped Form",
-            "Therian Forme",
+            //"Therian Forme",
             "Black Kyurem",
             "White Kyurem",
-            "Resolute Forme",
+            //"Resolute Forme",
             "Meowstic Female",
             "Aegislash Shield Forme",
             "Pumpkaboo Small Size",
@@ -61,14 +60,17 @@
             "Partner Pikachu"
         ]
 
-        data = data.filter( (d) => {
-            if (badNames.indexOf(d['name']) != -1) {
-                return false;
+        let data = data.filter( (d) => {
+            let keep = true;
+            if (badNames.includes(d.name)) {
+              keep = false
             }
             badSubNames.forEach(name => {
-                if (d['name'].indexOf(name) != -1) return false;
+              if (d.name.includes(name)) {
+                keep = false;
+              }
             });
-            return true;
+            return keep;
         });
 
 
