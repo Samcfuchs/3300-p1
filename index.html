@@ -17,133 +17,187 @@
     .then((data)) => {
       console.log("data", data);
       data = data.filter( (d) => {
-        if d['name'].includes("Mega"){
+        if (d['name'].includes("Mega")){
           return false;
         }
-        if d['name'].includes("Alolan"){
+        if (d['name'].includes("Alolan")){
           return false;
         }
-        if d['name'].includes("Galarian"){
+        if (d['name'].includes("Galarian")){
           return false;
         }
-        if d['name'] === "Deoxys Attack Forme"{
+        if (d['name'] === "Deoxys Attack Forme"){
           return false;
         }
-        if d['name'] === "Deoxys Defense Forme"{
+        if (d['name'] === "Deoxys Defense Forme"){
           return false;
         }
-        if d['name'] === 'Deoxys Speed Forme'{
+        if (d['name'] === 'Deoxys Speed Forme'){
           return false;
         }
-        if d['name'] === "Giratina Origin Forme"{
+        if (d['name'] === "Giratina Origin Forme"){
           return false;
         }
-        if d['name'] === "Basculin Blue-Striped Form"{
+        if (d['name'] === "Basculin Blue-Striped Form"){
           return false;
         }
-        if d['name'].includes("Therian Forme"){
+        if (d['name'].includes("Therian Forme")){
           return false;
         }
-        if d['name'] === "Black Kyurem" {
+        if (d['name'] === "Black Kyurem" ){
           return false;
         }
-        if d['name'] === "White Kyurem" {
+        if (d['name'] === "White Kyurem") {
           return false;
         }
-        if d['name'].includes("Resolute Forme"){
+        if (d['name'].includes("Resolute Forme")){
           return false;
         }
-        if d['name'] === "Meowstic Female"{
+        if (d['name'] === "Meowstic Female"){
           return false;
         }
-        if d['name'] === "Aegislash Shield Forme"{
+        if (d['name'] === "Aegislash Shield Forme"){
           return false;
         }
-        if d['name'] === "Pumpkaboo Small Size"{
+        if (d['name'] === "Pumpkaboo Small Size"){
           return false;
         }
-        if d['name'] === "Pumpkaboo Large Size"{
+        if (d['name'] === "Pumpkaboo Large Size"){
           return false;
         }
-        if d['name'] === "Pumpkaboo Super Size"{
+        if (d['name'] === "Pumpkaboo Super Size"){
           return false;
         }
-        if d['name'] === "Gourgeist Small Size"{
+        if (d['name'] === "Gourgeist Small Size"){
           return false;
         }
-        if d['name'] === "Gourgeist Large Size"{
+        if (d['name'] === "Gourgeist Large Size"){
           return false;
         }
-        if d['name'] === "Gourgeist Super Size"{
+        if (d['name'] === "Gourgeist Super Size"){
           return false;
         }
-        if d['name'] === "Zygarde 50% Forme"{
+        if (d['name'] === "Zygarde 50% Forme"){
           return false;
         }
-        if d['name'] === "Zygarde 10% Forme"{
+        if (d['name'] === "Zygarde 10% Forme"){
           return false;
         }
-        if d['name'] === "Own Tempo Rockruff"{
+        if (d['name'] === "Own Tempo Rockruff"){
           return false;
         }
-        if d['name'] === "Lycanroc Midday Form"{
+        if (d['name'] === "Lycanroc Midday Form"){
           return false;
         }
-        if d['name'] === "Lycanroc Midnight Form"{
+        if (d['name'] === "Lycanroc Midnight Form"){
           return false;
         }
-        if d['name'] === "Wishiwashi Solo Form"{
+        if (d['name'] === "Wishiwashi Solo Form"){
           return false;
         }
-        if d['name'] === "Minior Meteor Form"{
+        if (d['name'] === "Minior Meteor Form"){
           return false;
         }
-        if d['name'] === "Toxtricity Low Key Form"{
+        if (d['name'] === "Toxtricity Low Key Form"){
           return false;
         }
-        if d['name'] === "Eiscue Noice Face"{
+        if (d['name'] === "Eiscue Noice Face"){
           return false;
         }
-        if d['name'] === "Indeedee Male"{
+        if (d['name'] === "Indeedee Male"){
           return false;
         }
-        if d['name'] === "Morpeko Hangry Mode"{
+        if (d['name'] === "Morpeko Hangry Mode"){
           return false;
         }
-        if d['name'] === "Eternatus Eternamax"{
+        if (d['name'] === "Eternatus Eternamax"){
           return false;
         }
       })
 
-      function Total(generation){
+      function total(generation){
         count = 0
-        if generation == 0{
+        if (generation === 0){
           data.forEach(d => {
-            if d['name'].includes("Castform"){
+            if (d['name'].includes("Castform")){
               count += 1/4;
             }
-            if d['name'].includes("Wormadam"){
+            else if (d['name'].includes("Wormadam")){
               count+= 1/3;
             }
-            if d['name'].includes("Rotom"){
+            else if (d['name'].includes("Rotom")){
               count += 1/6;
             }
-            if d['name'].includes("Shaymin"){
+            else if (d['name'].includes("Shaymin")){
               count += 1/2;
             }
-            if d['name'].includes("Darmanitan"){
+            else if (d['name'].includes("Darmanitan")){
               count += 1/2;
             }
-            if d['name'].includes("Meloetta"){
+            else if (d['name'].includes("Meloetta")){
               count += 1/2;
             }
-            if d['name'].includes("Hoopa"){
+            else if (d['name'].includes("Hoopa")){
               count += 1/2;
             }
-            if d['name'].includes("Oricorio"){
+            else if (d['name'].includes("Oricorio")){
               count += 1/4;
             }
+            else if (d['name'].includes("Necrozma")){
+              count+= 1/4;
+            }
+            else if (d['name'].includes("Zacian")){
+              count +=1/2;
+            }
+            else if (d['name'].includes("Zamazenta")){
+              count += 1/2;
+            }
+            else {
+              count += 1
+            }
           })
+          else{
+            data.forEach( d => {
+              if d['generation'] == generation {
+                if (d['name'].includes("Castform")){
+                  count += 1/4;
+                }
+                else if (d['name'].includes("Wormadam")){
+                  count+= 1/3;
+                }
+                else if (d['name'].includes("Rotom")){
+                  count += 1/6;
+                }
+                else if (d['name'].includes("Shaymin")){
+                  count += 1/2;
+                }
+                else if (d['name'].includes("Darmanitan")){
+                  count += 1/2;
+                }
+                else if (d['name'].includes("Meloetta")){
+                  count += 1/2;
+                }
+                else if (d['name'].includes("Hoopa")){
+                  count += 1/2;
+                }
+                else if (d['name'].includes("Oricorio")){
+                  count += 1/4;
+                }
+                else if (d['name'].includes("Necrozma")){
+                  count+= 1/4;
+                }
+                else if (d['name'].includes("Zacian")){
+                  count +=1/2;
+                }
+                else if (d['name'].includes("Zamazenta")){
+                  count += 1/2;
+                }
+                else {
+                  count += 1
+                }
+              }
+            })
+          }
         }
       }
     }
