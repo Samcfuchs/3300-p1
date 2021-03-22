@@ -115,6 +115,8 @@
         }
       })
 
+      console.log("data", data);
+
       function total(generation){
         count = 0
         if (generation === 0){
@@ -198,11 +200,13 @@
               }
             })
           }
+          return count;
         }
-      }
-    })
+        console.log("Total", total(0));
+      })
 
-    console.log("Total", Total(0));
+
+
 
     </script>
 
