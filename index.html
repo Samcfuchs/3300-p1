@@ -14,7 +14,7 @@
 
     <script>
 
-    data = d3.csv("data/pokedex.csv")
+    data = d3.csv("data/pokedex.csv", d3.autoType)
     .then(data => {
         console.log("data", data);
         const badSubNames = [
@@ -83,8 +83,47 @@
                 })
             }
         }
+
+        let svg = d3.select("svg.viz")
+
+        const HEIGHT = 800;
+        const WIDTH  = 800;
+        const margin = {'left':40, 'right':20, 'top':20, 'bottom':40 }
+        const CHART_HEIGHT = HEIGHT - (margin.top + margin.bottom)
+        const CHART_WIDTH = WIDTH - (margin.left + margin.right)
+
+        let chart = svg.append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`)
+
+        let x_scale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d.attack))
+            .range([0, CHART_WIDTH])
+        let y_scale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d.defense))
+            .range([CHART_HEIGHT, 0])
+        
+        let x_axis = d3.axisBottom().scale(x_scale)
+        let y_axis = d3.axisLeft().scale(y_scale)
+        let axes = chart.append('g')
+        axes.append('g').call(x_axis)
+            .attr('transform', `translate(0,${CHART_HEIGHT})`);
+        axes.append('g').call(y_axis)
+
+        console.log(x_scale.domain())
+
+        let els = chart.selectAll('circle').data(data)
+        els.exit().remove()
+        els.enter()
+            .append('circle')
+            .attr('r', 4)
+            .merge(els)
+            .attr('cx', d => x_scale(d.attack))
+            .attr('cy', d => y_scale(d.defense))
+            .attr('fill', 'steelblue')
     });
 
+    </script>
+    <script>
     </script>
 
 
