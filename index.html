@@ -197,7 +197,7 @@
             .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
         let x_scale = d3.scaleLinear()
-            .domain(d3.extent(data, d => d.attack))
+            .domain(d3.extent(data, d => d.attack)) //HARD CODE MINIMUM TO 0
             .range([0, CHART_WIDTH])
         let y_scale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.defense))
