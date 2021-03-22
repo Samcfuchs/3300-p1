@@ -13,7 +13,7 @@
     <svg class="viz"></svg>
 
     <script>
-    data = d3.csv("data/pokedex.csv")
+    data = d3.csv("data/pokedex.csv", d3.autoType)
     .then((data) => {
       console.log("data", data);
       data = data.filter( (d) => {
@@ -113,6 +113,13 @@
         if (d['name'] === "Eternatus Eternamax"){
           return false;
         }
+        if (d['name'] === "Partner Eevee"){
+          return false;
+        }
+        if (d['name'] === "Partner Pikachu"){
+          return false;
+        }
+        return true;
       })
 
       console.log("data", data);
@@ -203,6 +210,7 @@
           return count;
         }
         console.log("Total", total(0));
+        console.log("gen 1", total(1));
       })
 
 
