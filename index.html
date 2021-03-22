@@ -61,6 +61,18 @@
             "Partner Pikachu"
         ]
 
+        data = data.filter( (d) => {
+            if (badNames.indexOf(d['name']) != -1) {
+                return false;
+            }
+            badSubNames.forEach(name => {
+                if (d['name'].indexOf(name) != -1) return false;
+            });
+            return true;
+        });
+
+
+
       console.log("data", data);
 
       function total(generation){
