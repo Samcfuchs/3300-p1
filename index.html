@@ -308,7 +308,7 @@
 
         chartArea.selectAll('rect.bar').data( data )
           .join('rect').attr('class','bar')
-          .attr("fill", "steelblue")
+          .attr("fill",d=> type_color[d.type_1])
           .attr("x", d => typeScale(d.type_1))
           .attr("y", d => totalScale(type_dict[d.type_1]))
           .attr("height", d => totalScale(0) - totalScale(type_dict[d.type_1]))
