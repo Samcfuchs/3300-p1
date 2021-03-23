@@ -5,6 +5,17 @@
     <title>Project 1</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+
+  .gridlines line {
+    stroke: #bbb;
+  }
+
+  .gridlines .domain {
+    stroke: none;
+  }
+
+</style>
 </head>
 <body>
     <h1>Pokemon Data Analytics</h1>
@@ -12,7 +23,7 @@
 
     <svg class="viz"></svg>
 
-    <svg class="total_pokemon"></svg>
+    <svg class="pokemon_type" height = "500" width="800"></svg>
 
     <script>
 
@@ -232,6 +243,79 @@
             .attr('cx', d => x_scale(d.attack))
             .attr('cy', d => y_scale(d.defense))
             .attr('fill', 'steelblue')
+
+
+
+
+        svg = d3.select("svg.pokemon_type");
+
+        type_1 = d3.map(data, d=> d.type_1 );
+        type_2 = d3.map(data, d=> d.type_2);
+
+        console.log("Type 1",type_1);
+        console.log("Type 2", type_2);
+
+        type_dict = {'Normal': 0, 'Fire': 0, 'Fighting': 0,
+                            'Water': 0, 'Flying': 0, 'Grass': 0,
+                            'Poison': 0, 'Electric': 0, 'Ground': 0,
+                            'Psychic': 0, 'Rock': 0, 'Ice': 0,
+                            'Bug': 0, 'Dragon': 0, 'Ghost': 0,
+                            'Dark': 0, 'Steel': 0, 'Fairy': 0}
+        data.forEach( d=> {
+          type_dict[d.type_1] += 1
+          if (d.type_2 != null){
+            type_dict[d.type_2] += 1
+          }
+        })
+        console.log(type_dict);
+
+        //const types = d3.map(type_dict);
+
+        console.log(Object.keys(type_dict))
+
+        const typeScale = d3.scaleBand().domain(Object.keys(type_dict)).range([0, CHART_WIDTH])
+                            .padding(0.05);
+
+        totalScale =d3.scaleLinear().domain([0,200]).range([CHART_HEIGHT, 0])
+        leftAxis = d3.axisLeft(totalScale).tickFormat("");
+        leftGridlines = d3.axisLeft(totalScale)
+                          .tickSize(-CHART_WIDTH-10)
+                          .tickFormat("");
+
+        bottomAxis = d3.axisBottom(typeScale);
+
+        //axes.append('g').call(bottomAxis)
+          //  .attr('transform', `translate(0,${CHART_HEIGHT})`);
+        //axes.append('g').call(leftAxis)
+
+        let annotations = svg.append("g").attr("id","annotations");
+        let chartArea = svg.append("g").attr("id","points")
+                .attr("transform",`translate(${margin.left},${margin.top})`);
+        annotations.append("g")
+                   .attr("class", "y axis")
+                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                   .call(leftAxis)
+        annotations.append("g")
+                   .attr("class", "y gridlines")
+                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                   .call(leftGridlines);
+        // We're not making gridlines, since they'll just stick up from the bars
+        annotations.append("g")
+                   .attr("class", "x axis")
+                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
+                   .call(bottomAxis);
+
+
+        chartArea.selectAll('rect.bar').data( data )
+          .join('rect').attr('class','bar')
+          .attr("fill", "steelblue")
+          .attr("x", d => typeScale(Object.keys(type_dict)))
+          .attr("y", d => totalScale(type_dict))
+          .attr("height", d => totalScale(0) - totalScale(Object.values(type_dict)))
+          .attr("width", typeScale.bandwidth());
+
+
+
     });
 
     </script>
