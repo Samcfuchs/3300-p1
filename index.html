@@ -23,6 +23,8 @@
             "Galarian",
             "Therian Forme",
             "Resolute Forme",
+            "Primal ",
+            "Ash-"
         ];
         const badNames = [
             //"Alolan",
@@ -164,6 +166,13 @@
         }
         console.log("Total", total(0));
         console.log("gen 1", total(1));
+        console.log("gen 2", total(2));
+        console.log("gen 3", total(3));
+        console.log("gen 4", total(4));
+        console.log("gen 5", total(5));
+        console.log("gen 6", total(6));
+        console.log("gen 7", total(7));
+        console.log("gen 8", total(8));
       //})
 
       const type_color = {'Normal': '#a8a878', 'Fire': '#f08030', 'Fighting': '#c03028',
@@ -174,16 +183,16 @@
                           'Dark': '#705848', 'Steel': '#b8b8d0', 'Fairy': '#ee99ac'}
 
 
-        function Total(generation){
-            count = 0
-            if (generation == 0) {
-                data.forEach(d => {
-                    if (d['name'].includes("Castform")) {
-                        count += 1/4
-                    }
-                })
-            }
-        }
+        // function Total(generation){
+        //     count = 0
+        //     if (generation == 0) {
+        //         data.forEach(d => {
+        //             if (d['name'].includes("Castform")) {
+        //                 count += 1/4
+        //             }
+        //         })
+        //     }
+        // }
 
         let svg = d3.select("svg.viz")
 
