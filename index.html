@@ -276,7 +276,7 @@
         const typeScale = d3.scaleBand().domain(type_1).range([0, CHART_WIDTH])
                             .padding(0.05);
 
-        totalScale =d3.scaleLinear().domain([0,200]).range([CHART_HEIGHT, 0]);
+        totalScale =d3.scaleLinear().domain([0,150]).range([CHART_HEIGHT, 0]);
         leftAxis = d3.axisLeft(totalScale).tickFormat("");
         leftGridlines = d3.axisLeft(totalScale)
                           .tickSize(-CHART_WIDTH-10)
