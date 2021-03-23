@@ -273,10 +273,10 @@
 
         console.log(Object.keys(type_dict))
 
-        const typeScale = d3.scaleBand().domain(Object.keys(type_dict)).range([0, CHART_WIDTH])
+        const typeScale = d3.scaleBand().domain(type_1).range([0, CHART_WIDTH])
                             .padding(0.05);
 
-        totalScale =d3.scaleLinear().domain([0,200]).range([CHART_HEIGHT, 0])
+        totalScale =d3.scaleLinear().domain([0,200]).range([CHART_HEIGHT, 0]);
         leftAxis = d3.axisLeft(totalScale).tickFormat("");
         leftGridlines = d3.axisLeft(totalScale)
                           .tickSize(-CHART_WIDTH-10)
@@ -309,9 +309,9 @@
         chartArea.selectAll('rect.bar').data( data )
           .join('rect').attr('class','bar')
           .attr("fill", "steelblue")
-          .attr("x", d => typeScale(Object.keys(type_dict)))
-          .attr("y", d => totalScale(type_dict))
-          .attr("height", d => totalScale(0) - totalScale(Object.values(type_dict)))
+          .attr("x", d => typeScale(d.type_1))
+          .attr("y", d => totalScale(type_dict[d.type_1]))
+          .attr("height", d => totalScale(0) - totalScale(type_dict[d.type_1]))
           .attr("width", typeScale.bandwidth());
 
 
