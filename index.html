@@ -23,13 +23,20 @@
 
     <svg class="viz"></svg>
 
-    <svg class="pokemon_type" height = "800" width="800"></svg>
+    <svg id="pokemon_type" height = "800" width="800"></svg>
+
+    <svg id="stat_catch" height="800" width="800"></svg>
 
     <script>
 
     data = d3.csv("data/pokedex.csv", d3.autoType)
     .then(data => {
         console.log("data", data);
+
+        data.forEach( d=> {
+          d['catch_rate']= d['catch_rate']/100;
+        })
+
         const badSubNames = [
             "Mega ",
             "Alolan",
@@ -247,7 +254,7 @@
 
 
 
-        svg = d3.select("svg.pokemon_type");
+        svg = d3.select("svg#pokemon_type");
 
         type_1 = d3.map(data, d=> d.type_1 );
         type_2 = d3.map(data, d=> d.type_2);
@@ -269,7 +276,7 @@
         })
         console.log(type_dict);
 
-        
+
 
         //const types = d3.map(type_dict);
 
@@ -319,8 +326,53 @@
         //Do we want to add labels above the bars with the total number for each column??
         //Do we want to sort the columns to be in highest to lowest order?
 
+        svg = d3.select("svg#stat_catch");
+        //totalPointExtent = d3.extent(data, d=> d['total_points']);
+        totalPointScale = d3.scaleLinear().domain([0, d3.max(data, d=> d['total_points'])]).range([CHART_HEIGHT, 0]);
+        //Trying to do high percent catch rate at front of chart
+        catchRateScale = d3.scaleLinear().domain([0, 1]).range([CHART_WIDTH,0])
 
+        annotations = svg.append("g").attr("id","annotations");
+        chartArea = svg.append("g").attr("id","points")
+                       .attr("transform",`translate(${margin.left},${margin.top})`);
 
+        leftAxis = d3.axisLeft(totalPointScale);
+        leftGridlines = d3.axisLeft(totalPointScale)
+          .tickSize(-CHART_WIDTH-10)
+          .tickFormat("");
+
+        bottomAxis = d3.axisBottom(catchRateScale)
+          .tickFormat(d3.format('.0%'));
+        bottomGridlines = d3.axisBottom(catchRateScale)
+          .tickSize(-CHART_HEIGHT-10)
+          .tickFormat("");
+
+        annotations.append("g")
+                    .attr("class", "y axis")
+                    .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                    .call(leftAxis)
+        annotations.append("g")
+                    .attr("class", "y gridlines")
+                    .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                    .call(leftGridlines);
+        // We're not making gridlines, since they'll just stick up from the bars
+        annotations.append("g")
+                   .attr("class", "x axis")
+                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
+                   .call(bottomAxis);
+        annotations.append("g")
+                   .attr("class", "x gridlines")
+                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
+                   .call(bottomGridlines)
+
+        //ADD A LINE TO SHOW THE TREND IN DATA! IF POSSIBLE!
+        chartArea.selectAll("circle.stat_catch").data(data)
+          .join("circle").attr("class", "stat_catch")
+          .attr("fill", d=> type_color[d.type_1])
+          .attr("cx",d=> catchRateScale(d.catch_rate))
+          .attr("cy", d=> totalPointScale(d.total_points))
+          .attr("r", 4)
+          .attr("opacity", .6);
     });
 
     </script>
