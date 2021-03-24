@@ -289,7 +289,7 @@
                             .padding(0.05);
 
         totalScale =d3.scaleLinear().domain([0,150]).range([CHART_HEIGHT, 0]);
-        leftAxis = d3.axisLeft(totalScale).tickFormat("");
+        leftAxis = d3.axisLeft(totalScale);
         leftGridlines = d3.axisLeft(totalScale)
                           .tickSize(-CHART_WIDTH-10)
                           .tickFormat("");
@@ -345,7 +345,7 @@
           .tickFormat("");
 
         bottomAxis = d3.axisBottom(catchRateScale)
-          .tickFormat("");//(d3.format('.0%'));
+          //.tickFormat("");//(d3.format('.0%'));
         bottomGridlines = d3.axisBottom(catchRateScale)
           .tickSize(-CHART_HEIGHT-10)
           .tickFormat("");
