@@ -332,7 +332,7 @@
         svg = d3.select("svg#stat_catch");
         //totalPointExtent = d3.extent(data, d=> d['total_points']);
         totalPointScale = d3.scaleLinear().domain([100, d3.max(data, d=> d['total_points'])]).range([CHART_HEIGHT, 0]);
-        //Trying to do high percent catch rate at front of chart
+        //TO CONVERT CATCH RATES INTO PERCENTAGES, DIVIDE EACH BY 765
         catchRateScale = d3.scaleLinear().domain([0, d3.max(data, d=> d['catch_rate'])]).range([0,CHART_WIDTH])
 
         annotations = svg.append("g").attr("id","annotations");
