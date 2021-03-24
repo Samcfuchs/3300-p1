@@ -33,9 +33,12 @@
     .then(data => {
         console.log("data", data);
 
-        data.forEach( d=> {
-          d['catch_rate']= d['catch_rate']/100;
-        })
+        // data.forEach( d=> {
+        //   if (d['catch_rate'] > 100){
+        //     d['catch_rate'] = 100;
+        //   }
+        //   d['catch_rate']= d['catch_rate']/100;
+        // })
 
         const badSubNames = [
             "Mega ",
@@ -328,9 +331,9 @@
 
         svg = d3.select("svg#stat_catch");
         //totalPointExtent = d3.extent(data, d=> d['total_points']);
-        totalPointScale = d3.scaleLinear().domain([0, d3.max(data, d=> d['total_points'])]).range([CHART_HEIGHT, 0]);
+        totalPointScale = d3.scaleLinear().domain([100, d3.max(data, d=> d['total_points'])]).range([CHART_HEIGHT, 0]);
         //Trying to do high percent catch rate at front of chart
-        catchRateScale = d3.scaleLinear().domain([0, 1]).range([CHART_WIDTH,0])
+        catchRateScale = d3.scaleLinear().domain([0, d3.max(data, d=> d['catch_rate'])]).range([0,CHART_WIDTH])
 
         annotations = svg.append("g").attr("id","annotations");
         chartArea = svg.append("g").attr("id","points")
@@ -342,7 +345,7 @@
           .tickFormat("");
 
         bottomAxis = d3.axisBottom(catchRateScale)
-          .tickFormat(d3.format('.0%'));
+          .tickFormat("");//(d3.format('.0%'));
         bottomGridlines = d3.axisBottom(catchRateScale)
           .tickSize(-CHART_HEIGHT-10)
           .tickFormat("");
@@ -373,6 +376,64 @@
           .attr("cy", d=> totalPointScale(d.total_points))
           .attr("r", 4)
           .attr("opacity", .6);
+
+
+        // function linearRegression(y,x){
+        //   var lr = {};
+        //   var n = 912;
+        //   var sum_x = 0;
+        //   var sum_y = 0;
+        //   var sum_xy = 0;
+        //   var sum_xx = 0;
+        //   var sum_yy = 0;
+        //
+        //   for (var i = 0; i < n; i++) {
+        //
+        //     sum_x += x[i];
+        //     sum_y += y[i];
+        //     sum_xy += (x[i]*y[i]);
+        //     sum_xx += (x[i]*x[i]);
+        //     sum_yy += (y[i]*y[i]);
+        //   }
+        //
+        //   lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+        //   lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+        //   lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
+        //
+        //   return lr;
+        //
+        // }
+        // console.log(linearRegression(data['total_points'], data['catch_rate']))
+
+
+        let lr={}
+        let n = 912
+        let sum_x = 0;
+        let sum_y = 0;
+        let sum_xy = 0;
+        let sum_xx = 0;
+        let sum_yy = 0;
+        data.forEach( d=> {
+          sum_x += d.catch_rate
+          sum_y += d.total_points
+          sum_xy += (d.catch_rate * d.total_points);
+          sum_xx += d.catch_rate * d.catch_rate;
+          sum_yy = d.total_points * d.total_points;
+        })
+        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+        lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
+
+
+        console.log(lr);
+        //THIS NEGATIVE SLOPE PROBABLY FOR AS CATCH RATE INCREASES THE TOTAL POINTS DECREASE
+
+        data.forEach( d=>{
+          if (d.catch_rate === 1){
+            console.log(d.name);
+          }
+
+        })
     });
 
     </script>
