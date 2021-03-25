@@ -33,12 +33,9 @@
     .then(data => {
         console.log("data", data);
 
-        // data.forEach( d=> {
-        //   if (d['catch_rate'] > 100){
-        //     d['catch_rate'] = 100;
-        //   }
-        //   d['catch_rate']= d['catch_rate']/100;
-        // })
+        data.forEach( d=> {
+          d['catch_rate']= d['catch_rate']/765;
+        })
 
         const badSubNames = [
             "Mega ",
@@ -273,9 +270,9 @@
                             'Dark': 0, 'Steel': 0, 'Fairy': 0}
         data.forEach( d=> {
           type_dict[d.type_1] += 1
-          if (d.type_2 != null){
-            type_dict[d.type_2] += 1
-          }
+          // if (d.type_2 != null){
+          //   type_dict[d.type_2] += 1
+          // }
         })
         console.log(type_dict);
 
