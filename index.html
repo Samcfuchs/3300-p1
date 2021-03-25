@@ -214,6 +214,20 @@
         //     }
         // }
 
+        means = {}
+        means = []
+        for (let type in type_color) {
+          console.log(type)
+          let of_type = data.filter(d => d.type_1 === type)
+          means[type] = {}
+          means.push({
+            'catch_rate': d3.mean(of_type, d => d.catch_rate),
+            'total_points': d3.mean(of_type, d => d.total_points),
+            'type': type
+          })
+        }
+        console.log(means)
+
         let svg = d3.select("svg.viz")
 
         const HEIGHT = 800;
@@ -226,10 +240,11 @@
             .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
         let x_scale = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d.attack)])
+          //.domain([0, d3.max(means, d => d.total_points)])
+          .domain(d3.extent(means, d => d.total_points))
           .range([0, CHART_WIDTH])
         let y_scale = d3.scaleLinear()
-          .domain([0, d3.max(data, d => d.defense)])
+          .domain([0, d3.max(means, d => d.catch_rate)])
           .range([CHART_HEIGHT, 0])
 
         let x_axis = d3.axisBottom().scale(x_scale)
@@ -241,15 +256,15 @@
 
         console.log(x_scale.domain())
 
-        let els = chart.selectAll('circle').data(data)
+        let els = chart.selectAll('circle').data(means)
         els.exit().remove()
         els.enter()
             .append('circle')
             .attr('r', 4)
             .merge(els)
-            .attr('cx', d => x_scale(d.attack))
-            .attr('cy', d => y_scale(d.defense))
-            .attr('fill', 'steelblue')
+            .attr('cx', d => x_scale(d.total_points))
+            .attr('cy', d => y_scale(d.catch_rate))
+            .attr('fill', d => type_color[d.type])
 
 
 
