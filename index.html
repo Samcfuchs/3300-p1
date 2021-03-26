@@ -15,6 +15,12 @@
     stroke: none;
   }
 
+  .label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    text-anchor: middle;
+  }
+
 </style>
 </head>
 <body>
@@ -279,8 +285,23 @@
             .attr('cx', d => x_scale(d.total_points))
             .attr('cy', d => y_scale(d.catch_rate))
             .attr('fill', d => type_color[d.type])
+        
+        let labels = chart.selectAll('g.label').data(means)
+        labels.exit().remove()
+        labels.enter()
+          .append('g')
+          .merge(labels)
+          .attr('class', d => d.type)
+          .classed('label', true)
+          .append('text')
+          .text(d => d.type)
+          .attr('x', d => x_scale(d.total_points))
+          .attr('y', d => y_scale(d.catch_rate) + 15)
+          .attr('fill', d => type_color[d.type])
 
 
+        let old_y = d3.select("g.Ghost").select('text').attr('y')
+        d3.select("g.Ghost").select('text').attr('y', old_y - 20)
         // ========================================
 
 
