@@ -1,490 +1,631 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Project 1</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-
-  .gridlines line {
-    stroke: #bbb;
-  }
-
-  .gridlines .domain {
-    stroke: none;
-  }
-
-  .label {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
-    text-anchor: middle;
-  }
-
-</style>
+  <title>INFO 3300 - Data-driven Web Pages</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="css/custom-style.css">
+  <meta charset="utf-8">
 </head>
 <body>
-    <h1>Pokemon Data Analytics</h1>
-    <h2>Max Coleman, Leo Decter, Sam Fuchs</h2>
-
-    <svg class="viz"></svg>
-
-    <svg id="pokemon_type" height = "800" width="800"></svg>
-
-    <svg id="stat_catch" height="800" width="800"></svg>
-
-    <script>
-
-    data = d3.csv("data/pokedex.csv", d3.autoType)
-    .then(data => {
-        console.log("data", data);
-
-        data.forEach( d=> {
-          d['catch_rate']= d['catch_rate']/765;
-        })
-
-        const badSubNames = [
-            "Mega ",
-            "Alolan",
-            "Galarian",
-            "Therian Forme",
-            "Resolute Forme",
-            "Primal ",
-            "Ash-"
-        ];
-        const badNames = [
-            //"Alolan",
-            //"Galarian",
-            "Deoxys Attack Forme",
-            "Deoxys Defense Forme",
-            "Deoxys Speed Forme",
-            "Giratina Origin Forme",
-            "Basculin Blue-Striped Form",
-            //"Therian Forme",
-            "Black Kyurem",
-            "White Kyurem",
-            //"Resolute Forme",
-            "Meowstic Female",
-            "Aegislash Shield Forme",
-            "Pumpkaboo Small Size",
-            "Pumpkaboo Large Size",
-            "Pumpkaboo Super Size",
-            "Gourgeist Small Size",
-            "Gourgeist Large Size",
-            "Gourgeist Super Size",
-            "Zygarde 50% Forme",
-            "Zygarde 10% Forme",
-            "Own Tempo Rockruff",
-            "Lycanroc Midday Form",
-            "Lycanroc Midnight Form",
-            "Wishiwashi Solo Form",
-            "Minior Meteor Form",
-            "Toxtricity Low Key Form",
-            "Eiscue Noice Face",
-            "Indeedee Male",
-            "Morpeko Hangry Mode",
-            "Eternatus Eternamax",
-            "Partner Eevee",
-            "Partner Pikachu"
-        ]
-
-        data = data.filter( (d) => {
-            let keep = true;
-            if (badNames.includes(d.name)) {
-              keep = false
-            }
-            badSubNames.forEach(name => {
-              if (d.name.includes(name)) {
-                keep = false;
-              }
-            });
-            return keep;
-        });
-
-
-
-      console.log("data", data);
-
-      function total(generation){
-        count = 0
-        if (generation === 0){
-          data.forEach(d => {
-            if (d['name'].includes("Castform")){
-              count += 1/4;
-            }
-            else if (d['name'].includes("Wormadam")){
-              count+= 1/3;
-            }
-            else if (d['name'].includes("Rotom")){
-              count += 1/6;
-            }
-            else if (d['name'].includes("Shaymin")){
-              count += 1/2;
-            }
-            else if (d['name'].includes("Darmanitan")){
-              count += 1/2;
-            }
-            else if (d['name'].includes("Meloetta")){
-              count += 1/2;
-            }
-            else if (d['name'].includes("Hoopa")){
-              count += 1/2;
-            }
-            else if (d['name'].includes("Oricorio")){
-              count += 1/4;
-            }
-            else if (d['name'].includes("Necrozma")){
-              count+= 1/4;
-            }
-            else if (d['name'].includes("Zacian")){
-              count +=1/2;
-            }
-            else if (d['name'].includes("Zamazenta")){
-              count += 1/2;
-            }
-            else {
-              count += 1
-            }
-          })
-        }else {
-            data.forEach( d => {
-              if (d['generation'] === generation) {
-                if (d['name'].includes("Castform")){
-                  count += 1/4;
-                }
-                else if (d['name'].includes("Wormadam")){
-                  count+= 1/3;
-                }
-                else if (d['name'].includes("Rotom")){
-                  count += 1/6;
-                }
-                else if (d['name'].includes("Shaymin")){
-                  count += 1/2;
-                }
-                else if (d['name'].includes("Darmanitan")){
-                  count += 1/2;
-                }
-                else if (d['name'].includes("Meloetta")){
-                  count += 1/2;
-                }
-                else if (d['name'].includes("Hoopa")){
-                  count += 1/2;
-                }
-                else if (d['name'].includes("Oricorio")){
-                  count += 1/4;
-                }
-                else if (d['name'].includes("Necrozma")){
-                  count+= 1/4;
-                }
-                else if (d['name'].includes("Zacian")){
-                  count +=1/2;
-                }
-                else if (d['name'].includes("Zamazenta")){
-                  count += 1/2;
-                }
-                else {
-                  count += 1
-                }
-              }
-            })
-          }
-          return count;
-        }
-        console.log("Total", total(0));
-        console.log("gen 1", total(1));
-        console.log("gen 2", total(2));
-        console.log("gen 3", total(3));
-        console.log("gen 4", total(4));
-        console.log("gen 5", total(5));
-        console.log("gen 6", total(6));
-        console.log("gen 7", total(7));
-        console.log("gen 8", total(8));
-      //})
-
-      const type_color = {'Normal': '#a8a878', 'Fire': '#f08030', 'Fighting': '#c03028',
-                          'Water': '#6890f0', 'Flying': '#a890f0', 'Grass': '#78c850',
-                          'Poison': '#a040a0', 'Electric': '#f8d030', 'Ground': '#e0c068',
-                          'Psychic': '#f85888', 'Rock': '#b8a038', 'Ice': '#98d8d8',
-                          'Bug': '#a8b820', 'Dragon': '#7038f8', 'Ghost': '#705898',
-                          'Dark': '#705848', 'Steel': '#b8b8d0', 'Fairy': '#ee99ac'}
-
-
-        // function Total(generation){
-        //     count = 0
-        //     if (generation == 0) {
-        //         data.forEach(d => {
-        //             if (d['name'].includes("Castform")) {
-        //                 count += 1/4
-        //             }
-        //         })
-        //     }
-        // }
-
-        // ========================================
-
-        means = {}
-        means = []
-        for (let type in type_color) {
-          console.log(type)
-          let of_type = data.filter(d => d.type_1 === type)
-          means[type] = {}
-          means.push({
-            'catch_rate': d3.mean(of_type, d => d.catch_rate),
-            'total_points': d3.mean(of_type, d => d.total_points),
-            'type': type
-          })
-        }
-        console.log(means)
-
-        let svg = d3.select("svg.viz")
-
-        const HEIGHT = 800;
-        const WIDTH  = 800;
-        const margin = {'left':40, 'right':20, 'top':20, 'bottom':40 }
-        const CHART_HEIGHT = HEIGHT - (margin.top + margin.bottom)
-        const CHART_WIDTH = WIDTH - (margin.left + margin.right)
-
-        let chart = svg.append('g')
-            .attr('transform', `translate(${margin.left}, ${margin.top})`)
-
-        let x_scale = d3.scaleLinear()
-          //.domain([0, d3.max(means, d => d.total_points)])
-          .domain(d3.extent(means, d => d.total_points))
-          .range([0, CHART_WIDTH])
-        let y_scale = d3.scaleLinear()
-          .domain([0, d3.max(means, d => d.catch_rate)])
-          .range([CHART_HEIGHT, 0])
-
-        let x_axis = d3.axisBottom().scale(x_scale)
-        let y_axis = d3.axisLeft().scale(y_scale)
-        let x_grid = d3.axisBottom().scale(x_scale)
-          .tickSize(-CHART_HEIGHT)
-          .tickFormat("")
-        let y_grid = d3.axisLeft().scale(y_scale)
-          .tickSize(-CHART_WIDTH)
-          .tickFormat("")
-
-        let grid = chart.append('g').attr('class', 'gridlines')
-        grid.append('g').call(x_grid)
-            .attr('transform', `translate(0,${CHART_HEIGHT})`);
-        grid.append('g').call(y_grid)
-
-        let axes = chart.append('g')
-        axes.append('g').call(x_axis)
-            .attr('transform', `translate(0,${CHART_HEIGHT})`);
-        axes.append('g').call(y_axis)
-
-        console.log(x_scale.domain())
-
-        let els = chart.selectAll('circle').data(means)
-        els.exit().remove()
-        els.enter()
-            .append('circle')
-            .attr('r', 4)
-            .merge(els)
-            .attr('cx', d => x_scale(d.total_points))
-            .attr('cy', d => y_scale(d.catch_rate))
-            .attr('fill', d => type_color[d.type])
-        
-        let labels = chart.selectAll('g.label').data(means)
-        labels.exit().remove()
-        labels.enter()
-          .append('g')
-          .merge(labels)
-          .attr('class', d => d.type)
-          .classed('label', true)
-          .append('text')
-          .text(d => d.type)
-          .attr('x', d => x_scale(d.total_points))
-          .attr('y', d => y_scale(d.catch_rate) + 15)
-          .attr('fill', d => type_color[d.type])
-
-
-        let old_y = d3.select("g.Ghost").select('text').attr('y')
-        d3.select("g.Ghost").select('text').attr('y', old_y - 20)
-        // ========================================
-
-
-        svg = d3.select("svg#pokemon_type");
-
-        type_1 = d3.map(data, d=> d.type_1 );
-        type_2 = d3.map(data, d=> d.type_2);
-
-        console.log("Type 1",type_1);
-        console.log("Type 2", type_2);
-
-        type_dict = {'Normal': 0, 'Fire': 0, 'Fighting': 0,
-                            'Water': 0, 'Flying': 0, 'Grass': 0,
-                            'Poison': 0, 'Electric': 0, 'Ground': 0,
-                            'Psychic': 0, 'Rock': 0, 'Ice': 0,
-                            'Bug': 0, 'Dragon': 0, 'Ghost': 0,
-                            'Dark': 0, 'Steel': 0, 'Fairy': 0}
-        data.forEach( d=> {
-          type_dict[d.type_1] += 1
-          // if (d.type_2 != null){
-          //   type_dict[d.type_2] += 1
-          // }
-        })
-        console.log(type_dict);
-
-
-
-        //const types = d3.map(type_dict);
-
-        console.log(Object.keys(type_dict))
-
-        const typeScale = d3.scaleBand().domain(type_1).range([0, CHART_WIDTH])
-                            .padding(0.05);
-
-        totalScale =d3.scaleLinear().domain([0,150]).range([CHART_HEIGHT, 0]);
-        leftAxis = d3.axisLeft(totalScale);
-        leftGridlines = d3.axisLeft(totalScale)
-                          .tickSize(-CHART_WIDTH-10)
-                          .tickFormat("");
-
-        bottomAxis = d3.axisBottom(typeScale);
-
-        //axes.append('g').call(bottomAxis)
-          //  .attr('transform', `translate(0,${CHART_HEIGHT})`);
-        //axes.append('g').call(leftAxis)
-
-        let annotations = svg.append("g").attr("id","annotations");
-        let chartArea = svg.append("g").attr("id","points")
-                .attr("transform",`translate(${margin.left},${margin.top})`);
-        annotations.append("g")
-                   .attr("class", "y axis")
-                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                   .call(leftAxis)
-        annotations.append("g")
-                   .attr("class", "y gridlines")
-                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                   .call(leftGridlines);
-        // We're not making gridlines, since they'll just stick up from the bars
-        annotations.append("g")
-                   .attr("class", "x axis")
-                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
-                   .call(bottomAxis);
-
-
-        chartArea.selectAll('rect.bar').data( data )
-          .join('rect').attr('class','bar')
-          .attr("fill",d=> type_color[d.type_1])
-          .attr("x", d => typeScale(d.type_1))
-          .attr("y", d => totalScale(type_dict[d.type_1]))
-          .attr("height", d => totalScale(0) - totalScale(type_dict[d.type_1]))
-          .attr("width", typeScale.bandwidth());
-
-        //Do we want to add labels above the bars with the total number for each column??
-        //Do we want to sort the columns to be in highest to lowest order?
-
-        svg = d3.select("svg#stat_catch");
-        //totalPointExtent = d3.extent(data, d=> d['total_points']);
-        totalPointScale = d3.scaleLinear().domain([100, d3.max(data, d=> d['total_points'])]).range([CHART_HEIGHT, 0]);
-        //TO CONVERT CATCH RATES INTO PERCENTAGES, DIVIDE EACH BY 765
-        catchRateScale = d3.scaleLinear().domain([0, d3.max(data, d=> d['catch_rate'])]).range([0,CHART_WIDTH])
-
-        annotations = svg.append("g").attr("id","annotations");
-        chartArea = svg.append("g").attr("id","points")
-                       .attr("transform",`translate(${margin.left},${margin.top})`);
-
-        leftAxis = d3.axisLeft(totalPointScale);
-        leftGridlines = d3.axisLeft(totalPointScale)
-          .tickSize(-CHART_WIDTH-10)
-          .tickFormat("");
-
-        bottomAxis = d3.axisBottom(catchRateScale)
-          //.tickFormat("");//(d3.format('.0%'));
-        bottomGridlines = d3.axisBottom(catchRateScale)
-          .tickSize(-CHART_HEIGHT-10)
-          .tickFormat("");
-
-        annotations.append("g")
-                    .attr("class", "y axis")
-                    .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                    .call(leftAxis)
-        annotations.append("g")
-                    .attr("class", "y gridlines")
-                    .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                    .call(leftGridlines);
-        // We're not making gridlines, since they'll just stick up from the bars
-        annotations.append("g")
-                   .attr("class", "x axis")
-                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
-                   .call(bottomAxis);
-        annotations.append("g")
-                   .attr("class", "x gridlines")
-                   .attr("transform",`translate(${margin.left},${CHART_HEIGHT+margin.top+10})`)
-                   .call(bottomGridlines)
-
-        //ADD A LINE TO SHOW THE TREND IN DATA! IF POSSIBLE!
-        chartArea.selectAll("circle.stat_catch").data(data)
-          .join("circle").attr("class", "stat_catch")
-          .attr("fill", d=> type_color[d.type_1])
-          .attr("cx",d=> catchRateScale(d.catch_rate))
-          .attr("cy", d=> totalPointScale(d.total_points))
-          .attr("r", 4)
-          .attr("opacity", .6);
-
-
-        //Source: https://stackoverflow.com/questions/6195335/linear-regression-in-javascript
-
-        // function linearRegression(y,x){
-        //   var lr = {};
-        //   var n = 912;
-        //   var sum_x = 0;
-        //   var sum_y = 0;
-        //   var sum_xy = 0;
-        //   var sum_xx = 0;
-        //   var sum_yy = 0;
-        //
-        //   for (var i = 0; i < n; i++) {
-        //
-        //     sum_x += x[i];
-        //     sum_y += y[i];
-        //     sum_xy += (x[i]*y[i]);
-        //     sum_xx += (x[i]*x[i]);
-        //     sum_yy += (y[i]*y[i]);
-        //   }
-        //
-        //   lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
-        //   lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
-        //   lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
-        //
-        //   return lr;
-        //
-        // }
-        // console.log(linearRegression(data['total_points'], data['catch_rate']))
-
-
-        let lr={}
-        let n = 912
-        let sum_x = 0;
-        let sum_y = 0;
-        let sum_xy = 0;
-        let sum_xx = 0;
-        let sum_yy = 0;
-        data.forEach( d=> {
-          sum_x += d.catch_rate
-          sum_y += d.total_points
-          sum_xy += (d.catch_rate * d.total_points);
-          sum_xx += d.catch_rate * d.catch_rate;
-          sum_yy = d.total_points * d.total_points;
-        })
-        lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
-        lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
-        lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
-
-
-        console.log(lr);
-        //THIS NEGATIVE SLOPE PROBABLY FOR AS CATCH RATE INCREASES THE TOTAL POINTS DECREASE
-
-
-    });
-
-    </script>
-    <script>
-    </script>
-
+  <div class="container larger">
+    <h4>INFO3300 Schedule</h4>
+    <p>
+      Over the course of the term we will slowly populate this schedule with slides, readings, and activities. These pages are mirrored from the <a href="https://github.com/jeffrz/info3300-sp2021">course GitHub repository</a> to a <a href="https://pages.github.com/">GitHub page</a> using a <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">submodule</a>. For helpful links, refer back to the <a href="https://jeffrz.com/info3300/">course home page</a>.
+    </p>
+    <p>
+      We will engage in a number of different classroom activities throughout the term. Please refer to this legend:
+    
+      <table id="legend">
+        <tr>
+          <td><span class="async">Asynchronous day:</span></td>
+          <td><span class="sync">Synchronous day:</span></td>
+          <td><span class="syncplus">Synchronous day that can be viewed asynchronously:</span></td>
+        </tr>
+      </table>
+    </p>
+    
+    <table class="u-full-width schedule online">
+      <tbody>
+           
+<!---1111 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 1</td>
+        <td colspan="6"> Introduction </td>
+      </tr>
+      <tr>
+        <td>8-Feb</td>
+        <td class="syncplus">Intro Lecture</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <a href="https://www.dropbox.com/s/48v9iv2sqjiioik/info3300-sp21-lec1-intro.pdf?dl=0">Slides</a> </td>
+        <td class="fixed-cell">  <a href="https://cornell.zoom.us/rec/share/bjP6ap3P2lOcehZypQqnxTa7HK5MJngQ5MjBTsVW9RKctZAk3DLhY325yCdohKlu.unRHrVgsKXGNCwoO">Recording</a> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>10-Feb</td>
+        <td class="async">Intro Javascript (coerced into a snafu)</td>
+        <td> <a href="./prompts/21.02.10.htm">Prompt</a> </td>
+        <td> <a href="./notes/21.02.10.notes.htm">Notes</a> </td>
+        <td class="fixed-cell"> <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=dae06c3a-72e1-41d2-859f-acca01400ce1">Recording</a> </td>
+        <td class="fixed-cell"> <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=69d68b42-cdac-4c18-bfc3-acca01573904">Optional GIT tutorial</a> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW1 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>12-Feb</td>
+        <td class="syncplus">Visual Channels</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <a href="https://www.dropbox.com/s/2hvf5rcc1pqqkxe/info3300-sp21-lec2-channels.pdf?dl=0">Slides</a> </td>
+        <td class="fixed-cell"> <a href="https://cornell.zoom.us/rec/play/Udz-lJLoihnhogPx-C1EyzIQUJTZKwhVeaKtWF-ylOY96hEiNBmYeaHEE4JfS0aXvUng8xYyBchhxZJi.teBEqF78rBMzdVOn">Recording</a> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="https://forms.gle/CMB6EFwK4rAHAUsr9">here</a> </td>
+      </tr>
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---2222 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 2</td>
+        <td colspan="6"> JS + SVG </td>
+      </tr>
+      <tr>
+        <td>15-Feb</td>
+        <td class="async">JS Events & Functions</td>
+        <td> <a href="./prompts/21.02.15.htm">Prompt</a> </td>
+        <td> <a href="./notes/21.02.15.notes.htm">Notes</a> </td>
+        <td class="fixed-cell"> <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=850c0b35-8bff-4f4e-a423-acd0003902ae">1</a>, <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=f11a2f15-2a83-49fa-984c-acd0003dbc08">2</a>, <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d38ea764-2847-4ac3-afe5-acd0004738e6">3</a> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>17-Feb</td>
+        <td class="async">Intro to SVG</td>
+        <td> <a href="./prompts/21.02.17.htm">Prompt</a> </td>
+        <td> <a href="./notes/21.02.17.notes.htm">Notes</a> </td>
+        <td class="fixed-cell">  <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c7c601df-3461-437c-a737-acd201027075">1</a>, <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=e7491295-a284-4fc6-b7b5-acd2010a24f5">2</a>, <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=6c4323a1-44a4-4f91-aa68-acd2010def5b">3</a> </td>
+        <td class="fixed-cell"> <a href="https://cornell.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=f8df05da-dafa-433a-a916-acd2011fe8f3">Optional web tutorial</a> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW2 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>19-Feb</td>
+        <td class="syncplus">Brief history of analytics</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW1 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---3333 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 3</td>
+        <td colspan="6"> Intro D3 </td>
+      </tr>
+      <tr>
+        <td>22-Feb</td>
+        <td class="async">Intro to d3</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>24-Feb</td>
+        <td class="async">d3 bar chart (scales in d3)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW3 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>26-Feb</td>
+        <td class="syncplus">Color theory + models</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW2 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---4444 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 4</td>
+        <td colspan="6"> Making a Scatterplot </td>
+      </tr>
+      <tr>
+        <td>1-Mar</td>
+        <td class="async">d3 basic scatterplot (importing data)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW4 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>3-Mar</td>
+        <td class="async">d3 fancy scatterplot (labels & hover)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  Project 1 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>5-Mar</td>
+        <td class="sync">Visual Perception</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW3 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---5555 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 5</td>
+        <td colspan="6"> Enter, Exit, & Update </td>
+      </tr>
+      <tr>
+        <td>8-Mar</td>
+        <td class="async">d3 joins (old & new style)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW5 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>10-Mar</td>
+        <td colspan="6">No class - Wellness Day</td>
+      </tr>
+      <tr>
+        <td>12-Mar</td>
+        <td class="syncplus">d3 line plots</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW4 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---6666 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 6</td>
+        <td colspan="6"> Customizing Charts </td>
+      </tr>
+      <tr>
+        <td>15-Mar</td>
+        <td class="async">d3 line plots (interactivity)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>17-Mar</td>
+        <td class="async">d3 lollipop chart</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>19-Mar</td>
+        <td class="syncplus">Geographic visualizations</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW5 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---7777 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 7</td>
+        <td colspan="6"> Choropleth Week </td>
+      </tr>
+      <tr>
+        <td>22-Mar</td>
+        <td class="async">d3 choropleth (hooray geoJSON)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>24-Mar</td>
+        <td class="async">d3 choropleth (projections)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW6 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>26-Mar</td>
+        <td class="syncplus">d3 choropleth (dots & interactions)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  Project 1 submission due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---8888 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 8</td>
+        <td colspan="6"> Fancy Layouts </td>
+      </tr>
+      <tr>
+        <td>29-Mar</td>
+        <td class="async">d3 density vis (contour, density)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  Project 2 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>31-Mar</td>
+        <td class="async">d3 emergent layout (bubbleplots)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>2-Apr</td>
+        <td class="sync">Network Layouts</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW6 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---9999 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 9</td>
+        <td colspan="6"> Network Diagrams </td>
+      </tr>
+      <tr>
+        <td>5-Apr</td>
+        <td class="async">d3 network layouts</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>7-Apr</td>
+        <td class="async">d3 chord diagrams</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW7 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>9-Apr</td>
+        <td class="async">Multivariate Visualizations</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---0000 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 10</td>
+        <td colspan="6"> Interactivity </td>
+      </tr>
+      <tr>
+        <td>12-Apr</td>
+        <td class="async">3D d3 day (a.k.a. 3-don't)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW8 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>14-Apr</td>
+        <td class="async">Human-Visualization Interaction</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>16-Apr</td>
+        <td class="syncplus">client/server patterns</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW7 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---1111 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 11</td>
+        <td colspan="6"> Recreating HomeFinder </td>
+      </tr>
+      <tr>
+        <td>19-Apr</td>
+        <td class="async">d3 homefinder (query manip)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  5100 Project assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>21-Apr</td>
+        <td class="async">d3 homefinder (direct manip)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW8 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <tr>
+        <td>23-Apr</td>
+        <td colspan="6">No class - Wellness Day</td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---2222 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 12</td>
+        <td colspan="6"> Overview & Detail </td>
+      </tr>
+      <tr>
+        <td>26-Apr</td>
+        <td colspan="6">No class - Wellness Day</td>
+      </tr>
+      <tr>
+        <td>28-Apr</td>
+        <td class="async">d3 pan+zoom</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW9 assigned on CMS </td>
+      </tr>
+      <tr>
+        <td>30-Apr</td>
+        <td class="sync">Project 2 Demos + Critique</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  Project 2 submission due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---3333 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 13</td>
+        <td colspan="6"> Challenge Visualizations </td>
+      </tr>
+      <tr>
+        <td>3-May</td>
+        <td class="async">d3 text vis</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>5-May</td>
+        <td class="async">d3 raster vis</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>7-May</td>
+        <td class="syncplus">Animations & storytelling</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="6">  HW9 due by 11:59PM (midnight) EST </td>
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr>      
+<!---4444 - - - - - - - - - - - - - - - - - - - - - - - - - - - --->     
+      <tr class="week-label">
+        <td>Week 14</td>
+        <td colspan="6"> Putting it all together </td>
+      </tr>
+      <tr>
+        <td>10-May</td>
+        <td class="async">d3 color survey (live updates)</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>12-May</td>
+        <td class="async">d3 animated color vis</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <tr>
+        <td>14-May</td>
+        <td class="sync">Physicalization & Access</td>
+        <td> <!--- <a href="./prompts/21.N.N.htm">Prompt</a> ---> </td>
+        <td> <!--- <a href="./notes/21.N.N.notes.htm">Notes</a> ---> </td>
+        <td class="fixed-cell"> <!--- <a href="URL_GOES_HERE">Recording</a> ---> </td>
+        <td class="fixed-cell"> <!--- > <a href="URL_GOES_HERE">Optional</a> ---> </td> 
+      </tr>
+      <!--- <tr>
+        <td></td>
+        <td colspan="6"> Quiz for the week is located <a href="">here</a> </td>
+      </tr> --->
+      <tr>
+        <td colspan="7"></td>
+      </tr> 
+      
+      <tr class="week-label">
+        <td colspan="7">Final Exam/Project Submission</td>
+      </tr>
+      <tr>
+        <td>TBD</td>
+        <td colspan="6">Due some time between May 19-25</td>
+      </tr>    
+      
+      
+      </tbody>
+    </table>
+  
+  </div>
 
 </body>
 </html>
