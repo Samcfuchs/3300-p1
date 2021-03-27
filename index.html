@@ -41,8 +41,15 @@
 
     <svg class="viz"></svg>
 
+    <h3>Graph 1: Total Number of Pokemon in each Type</h3>
+    <p>We wanted to see the total number of Pokemon in each of the 18 types in order to
+    guage the differences in each type. See the difference in popularity should be useful when seeing
+    which of the types is the "best."</p>
     <svg id="pokemon_type" height = "800" width="800"></svg>
-
+    <h3>Graphy 2: Every Pokemons Total Stat Points vs. Catch Rate</h3>
+    <p>Comparing every Pokemons total stat points to their catchrate, we hope to find a relationship
+    between the two. We are hoping to find that as the catch rate of pokemon decraese, their total stat points
+    will also decrease, showing that Pokemon with lower catch rates have higher total stat points, making them better.</p>
     <svg id="stat_catch" height="800" width="800"></svg>
 
     <script>
@@ -311,7 +318,7 @@
           .attr('cx', d => x_scale(d.total_points))
           .attr('cy', d => y_scale(d.catch_rate))
           .attr('fill', d => type_color[d.type])
-        
+
         let labels = chart.selectAll('g.label').data(means)
         labels.exit().remove()
         labels.enter()
