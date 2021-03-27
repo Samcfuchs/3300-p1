@@ -25,6 +25,14 @@
     text-anchor: middle;
   }
 
+  .axis_label {
+    text-anchor:middle;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .bar_label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 </style>
 </head>
 <body>
@@ -278,17 +286,31 @@
             .attr('transform', `translate(0,${CHART_HEIGHT})`);
         axes.append('g').call(y_axis)
 
+        // Add axis labels
+        chart.append('text').classed('axis_label', true)
+          .attr('x', x_scale(435))
+          .attr('y', y_scale(-.008))
+          .text("Average Total points")
+        chart.append('text').classed('axis_label', true)
+          .attr('x', x_scale(390))
+          .attr('y', y_scale(0.082))
+          .text("Average Catch Rate")
+          .attr('transform', `rotate(-90 18 ${(CHART_HEIGHT + margin.top + margin.bottom)/2.0})`)
+          //.attr('transform', `rotate(90)`)
+
+
         console.log(x_scale.domain())
 
+        // Add data labels
         let els = chart.selectAll('circle').data(means)
         els.exit().remove()
         els.enter()
-            .append('circle')
-            .attr('r', 4)
-            .merge(els)
-            .attr('cx', d => x_scale(d.total_points))
-            .attr('cy', d => y_scale(d.catch_rate))
-            .attr('fill', d => type_color[d.type])
+          .append('circle')
+          .attr('r', 4)
+          .merge(els)
+          .attr('cx', d => x_scale(d.total_points))
+          .attr('cy', d => y_scale(d.catch_rate))
+          .attr('fill', d => type_color[d.type])
         
         let labels = chart.selectAll('g.label').data(means)
         labels.exit().remove()
@@ -304,6 +326,7 @@
           .attr('fill', d => type_color[d.type])
 
 
+        // Fix this one label that overlaps
         let old_y = d3.select("g.Ghost").select('text').attr('y')
         d3.select("g.Ghost").select('text').attr('y', old_y - 20)
         // ========================================
