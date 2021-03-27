@@ -33,9 +33,14 @@
   .bar_label {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
+
   svg.viz {
     height: 800px;
     width:800px;
+  }
+
+  h1,h2,p {
+    font-family: Arial, Helvetica, sans-serif
   }
 </style>
 </head>
@@ -433,7 +438,7 @@
           .text(d => d[1]);
 
         // Labels for each axis
-        svg.append('text').text('Pokeman Type')
+        svg.append('text').text('Pokemon Type')
                           .attr('class', 'axis_label')
                           .attr('x', CHART_WIDTH/2.0 + margin.left)
                           .attr('y', CHART_HEIGHT + margin.top + margin.bottom - 15)
